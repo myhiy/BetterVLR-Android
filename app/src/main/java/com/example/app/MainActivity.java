@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 
         mWebView = findViewById(R.id.activity_main_webview);
         WebSettings webSettings = mWebView.getSettings();
+        webSettings.setDomStorageEnabled(true);
         webSettings.setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new MyWebViewClient());
 
@@ -56,34 +57,25 @@ public class MainActivity extends Activity {
             mSwipeRefreshLayout.setRefreshing(false);
 
             // Load and execute custom JavaScript from a URL
-            String scriptUrl = "https://gist.githubusercontent.com/myhiy/a40e2481427ee909d8430f872ffdfb4a/raw/browser.js";
-            String javascriptCode = "(function() {" +
-                    "   var xhr = new XMLHttpRequest();" +
-                    "   xhr.onreadystatechange = function() {" +
-                    "       if (xhr.readyState === 4 && xhr.status === 200) {" +
-                    "           eval(xhr.responseText);" +
-                    "       }" +
-                    "   };" +
-                    "   xhr.open('GET', '" + scriptUrl + "', true);" +
-                    "   xhr.send();" +
-                    "})()";
-            view.evaluateJavascript(javascriptCode, null);
+            String bettervlrJS = "(function bettervlrJS() {" +
+                    "    var script = document.createElement(`script`);" +
+                    "    script.type = `text/javascript`;" +
+                    "    script.src = `https://cdn.jsdelivr.net/gh/myhiy/BetterVLR-Builds/browser.js`;" +
+                    "    var head = document.getElementsByTagName(`head`)[0];" +
+                    "    if (!head) return;" +
+                    "    head.appendChild(script);" +
+                    "})();";
+            view.evaluateJavascript(bettervlrJS, null);
 
-            // Load and apply custom CSS styles from a URL
-            String cssUrl = "https://gist.githubusercontent.com/myhiy/22fc97267c306139660c30d222d49344/raw/browser.css";
-            String javascriptCodeCss = "(function() {" +
-                    "   var xhr = new XMLHttpRequest();" +
-                    "   xhr.onreadystatechange = function() {" +
-                    "       if (xhr.readyState === 4 && xhr.status === 200) {" +
-                    "           var style = document.createElement('style');" +
-                    "           style.innerHTML = xhr.responseText;" +
-                    "           document.head.appendChild(style);" +
-                    "       }" +
-                    "   };" +
-                    "   xhr.open('GET', '" + cssUrl + "', true);" +
-                    "   xhr.send();" +
-                    "})()";
-            view.evaluateJavascript(javascriptCodeCss, null);
+            String bettervlrCSS = "(function bettervlrCSS() {" +
+                    "    var style = document.createElement(`link`);" +
+                    "    style.rel = `stylesheet`;" +
+                    "    style.href = `https://cdn.jsdelivr.net/gh/myhiy/BetterVLR-Builds/browser.css`;" +
+                    "    var head = document.getElementsByTagName(`head`)[0];" +
+                    "    if (!head) return;" +
+                    "    head.appendChild(style);" +
+                    "})();";
+            view.evaluateJavascript(bettervlrCSS, null);
         }
     }
 }
